@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="de">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#f8f4fb">
+    <title>Dein Chastity-Test</title>
+    <style>
+        :root {
+            font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            color: #302638;
+            background: #f8f4fb;
+            --purple: #7651a5;
+            --purple-dark: #57347f;
+            --muted: #766d7c;
+        }
+
+        * { box-sizing: border-box; }
+        body {
+            display: grid;
+            min-height: 100vh;
+            margin: 0;
+            padding: 32px 16px;
+            place-items: center;
+            background: radial-gradient(ellipse at 80% 0%, rgba(232, 213, 247, .72), transparent 34rem), #f8f4fb;
+        }
+
+        .card {
+            width: min(100%, 620px);
+            padding: clamp(24px, 6vw, 46px);
+            border: 1px solid #fff;
+            border-radius: 24px;
+            background: #fff;
+            box-shadow: 0 18px 55px rgba(61, 41, 75, .09);
+        }
+
+        .back {
+            color: var(--purple);
+            font-size: 14px;
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+        .eyebrow {
+            margin: 30px 0 8px;
+            color: var(--purple);
+            font-size: 12px;
+            font-weight: 800;
+            letter-spacing: .14em;
+            text-transform: uppercase;
+        }
+
+        h1 {
+            margin: 0;
+            font-size: clamp(30px, 7vw, 42px);
+            letter-spacing: -.05em;
+        }
+
+        .intro {
+            margin: 10px 0 28px;
+            color: var(--muted);
+            line-height: 1.6;
+        }
+
+        fieldset {
+            margin: 0 0 22px;
+            padding: 0;
+            border: 0;
+        }
+
+        legend {
+            margin-bottom: 11px;
+            font-size: 15px;
+            font-weight: 750;
+        }
+
+        .options { display: grid; gap: 8px; }
+
+        .option {
+            display: flex;
+            align-items: center;
+            gap: 11px;
+            padding: 12px 14px;
+            border: 1px solid #eee7f2;
+            border-radius: 12px;
+            cursor: pointer;
+        }
+
+        .option:has(input:checked) {
+            border-color: #bda4d3;
+            background: #faf7fc;
+        }
+
+        input[type="radio"] { accent-color: var(--purple); }
+
+        textarea {
+            width: 100%;
+            min-height: 110px;
+            padding: 12px;
+            resize: vertical;
+            border: 1px solid #e7dfeb;
+            border-radius: 12px;
+            font: inherit;
+        }
+
+        input:focus-visible, textarea:focus-visible, button:focus-visible, a:focus-visible {
+            outline: 3px solid rgba(118, 81, 165, .35);
+            outline-offset: 3px;
+        }
+
+        button {
+            width: 100%;
+            min-height: 48px;
+            border: 0;
+            border-radius: 12px;
+            color: #fff;
+            background: var(--purple);
+            font: inherit;
+            font-weight: 750;
+            cursor: pointer;
+        }
+        button:hover { background: var(--purple-dark); }
+
+        #result {
+            min-height: 24px;
+            margin: 18px 0 0;
+            color: var(--purple-dark);
+            font-size: 18px;
+            font-weight: 750;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <main class="card">
+        <a class="back" href="index.html">← Zurück zum Counter</a>
+        <p class="eyebrow">Fragebogen</p>
+        <h1>Dein Chastity-Test</h1>
+        <p class="intro">Beantworte alle Fragen und erhalte deine persönliche Bewertung.</p>
+
+        <form id="quiz">
+            <fieldset>
+                <legend>1. Wie lange möchtest du locked bleiben?</legend>
+                <div class="options">
+                    <label class="option"><input type="radio" name="q1" value="2"> 1 Monat</label>
+                    <label class="option"><input type="radio" name="q1" value="3"> 1 Jahr</label>
+                    <label class="option"><input type="radio" name="q1" value="1"> 1 Woche</label>
+                </div>
+            </fieldset>
+
+            <fieldset>
+                <legend>2. Wie möchtest du dich befriedigen?</legend>
+                <div class="options">
+                    <label class="option"><input type="radio" name="q2" value="2"> Dildo</label>
+                    <label class="option"><input type="radio" name="q2" value="3"> Real Cock</label>
+                    <label class="option"><input type="radio" name="q2" value="1"> Vibrator</label>
+                </div>
+            </fieldset>
+
+            <fieldset>
+                <label for="q3"><strong>3. Was antwortet eine gehorsame Sissy ihrer Mistress?</strong></label>
+                <textarea id="q3" placeholder="Schreibe deine Antwort..."></textarea>
+            </fieldset>
+
+            <button type="submit">Test auswerten</button>
+            <p id="result" role="status" aria-live="polite"></p>
+        </form>
+    </main>
+
+    <script>
+        document.getElementById("quiz").addEventListener("submit", (event) => {
+            event.preventDefault();
+            const q1 = document.querySelector('input[name="q1"]:checked');
+            const q2 = document.querySelector('input[name="q2"]:checked');
+            const q3 = document.getElementById("q3").value.trim();
+            const result = document.getElementById("result");
+
+            if (!q1 || !q2 || !q3) {
+                result.textContent = "Bitte beantworte alle Fragen.";
+                return;
+            }
+
+            const points = Number(q1.value) + Number(q2.value);
+            const rating = points === 6 ? "Good Girl" : points >= 3 ? "Sissy in Making" : "Beginner Sissy";
+            result.textContent = `Deine Bewertung ist: ${rating}`;
+        });
+    </script>
+</body>
+</html>
